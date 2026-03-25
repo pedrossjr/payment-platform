@@ -19,6 +19,16 @@ services:
     ports:
       - "5433:5432"
 
+  account-db:
+    image: postgres:18.3-alpine
+    container_name: account-db
+    environment:
+      POSTGRES_DB: account-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"
+
   pgadmin:
     image: dpage/pgadmin4:8.12
     container_name: pgadmin_payment
@@ -30,6 +40,8 @@ services:
       - "5050:80"
     depends_on:
       - auth-db
+      - payment-db
+      - account-db
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
