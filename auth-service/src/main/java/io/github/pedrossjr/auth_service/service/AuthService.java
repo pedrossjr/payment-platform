@@ -15,6 +15,7 @@ public class AuthService {
     private final io.github.pedrossjr.common.security.JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
+    //TODO - Tratar exceção
     public String register(String username, String password) {
 
         User user = new User();
@@ -28,6 +29,7 @@ public class AuthService {
         return "Usuário criado com sucesso.";
     }
 
+    //TODO - Tratar exceção
     public String login(String username, String password) {
         User user = userRepository.findByUsername(username)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));

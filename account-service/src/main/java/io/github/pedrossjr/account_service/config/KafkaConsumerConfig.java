@@ -1,6 +1,5 @@
 package io.github.pedrossjr.account_service.config;
 
-import io.github.pedrossjr.common.record.PaymentRecord;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
@@ -9,7 +8,6 @@ import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import io.github.pedrossjr.common.event.PaymentCreatedEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +21,7 @@ import java.util.Map;
 
 @EnableKafka
 @Configuration
-public class KafkaConfig {
+public class KafkaConsumerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
@@ -39,7 +37,7 @@ public class KafkaConfig {
         config.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, JsonDeserializer.class);
         config.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class);
         config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-        config.put(JsonDeserializer.VALUE_DEFAULT_TYPE, "io.github.pedrossjr.common.record.PaymentRecord");
+        config.put(JsonDeserializer.VALUE_DEFAULT_TYPE, "io.github.pedrossjr.common.event.PaymentCreatedEvent");
         return new DefaultKafkaConsumerFactory<>(config);
     }
 
@@ -51,7 +49,7 @@ public class KafkaConfig {
         ConcurrentKafkaListenerContainerFactory<String, PaymentCreatedEvent> factory =
             new ConcurrentKafkaListenerContainerFactory<>();
 
-        factory.setConsumerFactory(paymentConsumerFactory());
+        factory.setConsumerFactory(consumerFactory);
 
         DefaultErrorHandler errorHandler = new DefaultErrorHandler(
             new DeadLetterPublishingRecoverer(kafkaTemplate),

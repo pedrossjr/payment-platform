@@ -1,4 +1,4 @@
-package io.github.pedrossjr.payment_service.record;
+package io.github.pedrossjr.common.record;
 
 import java.math.BigDecimal;
 

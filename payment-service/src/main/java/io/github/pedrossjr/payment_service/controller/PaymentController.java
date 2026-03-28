@@ -1,6 +1,6 @@
 package io.github.pedrossjr.payment_service.controller;
 
-import io.github.pedrossjr.common.dto.PaymentRequest;
+import io.github.pedrossjr.common.record.PaymentRecord;
 import io.github.pedrossjr.payment_service.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +14,10 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping
-    public ResponseEntity<?> create(
+    public ResponseEntity<?> createPayment(
         @RequestHeader("Idempotency-Key") String key,
-        @RequestBody PaymentRequest paymentRequest
+        @RequestBody PaymentRecord paymentRecord
     ) {
-        return ResponseEntity.ok(paymentService.createPayment(paymentRequest, key));
+        return ResponseEntity.ok(paymentService.createPayment(paymentRecord, key));
     }
 }
