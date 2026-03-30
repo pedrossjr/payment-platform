@@ -1,5 +1,6 @@
 package io.github.pedrossjr.account_service.config;
 
+import org.apache.kafka.common.TopicPartition;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
@@ -21,7 +22,7 @@ import java.util.Map;
 
 @EnableKafka
 @Configuration
-public class KafkaConsumerConfig {
+public class KafkaConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
@@ -51,9 +52,14 @@ public class KafkaConsumerConfig {
 
         factory.setConsumerFactory(consumerFactory);
 
+        DeadLetterPublishingRecoverer recoverer =
+            new DeadLetterPublishingRecoverer(kafkaTemplate,
+                (record, ex) -> new TopicPartition(record.topic() + ".DLT", record.partition())
+            );
+
         DefaultErrorHandler errorHandler = new DefaultErrorHandler(
             new DeadLetterPublishingRecoverer(kafkaTemplate),
-            new FixedBackOff(6000L, 3)
+            new FixedBackOff(5000L, 3)
         );
 
         factory.setCommonErrorHandler(errorHandler);
