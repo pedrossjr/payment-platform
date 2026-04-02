@@ -14,12 +14,12 @@ public class PaymentProducer {
 
     public void sendPaymentCreatedEvent(Payment payment) {
 
-        PaymentCreatedEvent event = new PaymentCreatedEvent(
+        PaymentCreatedEvent paymentCreatedEvent = new PaymentCreatedEvent(
             payment.getId(),
-            payment.getAccountId(),
+            payment.getAccountNumber(),
             payment.getAmount()
         );
 
-        kafkaTemplate.send("payment-created", event);
+        kafkaTemplate.send("payment-created", paymentCreatedEvent);
     }
 }

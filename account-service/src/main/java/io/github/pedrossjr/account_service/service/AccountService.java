@@ -11,6 +11,7 @@ import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Random;
 
@@ -29,7 +30,7 @@ public class AccountService {
     )
     public void processPayment(PaymentCreatedEvent paymentCreatedEvent) {
         try {
-            Account account = accountRepository.findById(paymentCreatedEvent.getAccountId())
+            Account account = accountRepository.findByAccountNumber(paymentCreatedEvent.getAccountNumber())
                 .orElseThrow(() -> new RuntimeException("Conta não encontrada."));
 
             if (account.getBalance().compareTo(paymentCreatedEvent.getAmount()) < 0) {
@@ -56,7 +57,7 @@ public class AccountService {
 
     public Account createAccount(AccountRecord accountRecord) {
 
-        String accountNumber = this.createAccountNumber();
+        String accountNumber = this.generateAccountNumber();
 
         boolean accountExists = accountRepository.existsByAccountNumber(accountNumber);
 
@@ -73,7 +74,7 @@ public class AccountService {
         return accountCreated;
     }
 
-    public String createAccountNumber() {
+    public String generateAccountNumber() {
         Integer minimo = 100000;
         Integer maximo = 999999;
 
@@ -102,6 +103,30 @@ public class AccountService {
             }
 
             return accounts;
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Account transferAmountAccount(String fromAccountNumber, String toAccountNumber, BigDecimal amount) {
+        try {
+            Account fromAccount = accountRepository.findByAccountNumber(fromAccountNumber)
+                .orElseThrow(() -> new RuntimeException("Conta de origem não encontrada."));
+
+            Account toAccount = accountRepository.findByAccountNumber(toAccountNumber)
+                .orElseThrow(() -> new RuntimeException("Conta de destino não encontrada."));
+
+            if (fromAccount.getBalance().compareTo(amount) < 0) {
+                throw new RuntimeException("Saldo insuficiente na conta de origem.");
+            }
+
+            fromAccount.setBalance(fromAccount.getBalance().subtract(amount));
+            toAccount.setBalance(toAccount.getBalance().add(amount));
+
+            accountRepository.save(fromAccount);
+            accountRepository.save(toAccount);
+
+            return fromAccount;
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }

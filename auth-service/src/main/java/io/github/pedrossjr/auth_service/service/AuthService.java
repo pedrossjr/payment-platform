@@ -15,29 +15,34 @@ public class AuthService {
     private final io.github.pedrossjr.common.security.JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
-    //TODO - Tratar exceção
     public String register(String username, String password) {
+        try {
+            User user = new User();
 
-        User user = new User();
+            user.setUsername(username);
+            user.setPassword(passwordEncoder.encode(password));
+            user.setRole("USER");
 
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRole("USER");
+            userRepository.save(user);
 
-        userRepository.save(user);
-
-        return "Usuário criado com sucesso.";
+            return "Usuário criado com sucesso.";
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao registrar usuário: " + e.getMessage());
+        }
     }
 
-    //TODO - Tratar exceção
     public String login(String username, String password) {
-        User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+        try{
+            User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
 
-        if(!passwordEncoder.matches(password, user.getPassword())) {
-            throw new RuntimeException("Senha inválida.");
+            if(!passwordEncoder.matches(password, user.getPassword())) {
+                throw new RuntimeException("Senha inválida.");
+            }
+
+            return jwtService.generateToken(username);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao pesquisar usuário: " + e.getMessage());
         }
-
-        return jwtService.generateToken(username);
     }
 }

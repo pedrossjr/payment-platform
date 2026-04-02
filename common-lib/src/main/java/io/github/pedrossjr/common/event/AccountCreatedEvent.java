@@ -9,10 +9,10 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentCreatedEvent {
+public class AccountCreatedEvent {
 
-    private Long paymentId;
+    private Long userId;
     private String accountNumber;
-    private BigDecimal amount;
+    private BigDecimal balance;
 
 }

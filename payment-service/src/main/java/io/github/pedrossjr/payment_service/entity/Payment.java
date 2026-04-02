@@ -17,7 +17,7 @@ public class Payment {
 
     private String externalId;
 
-    private Long accountId;
+    private String accountNumber;
 
     private BigDecimal amount;
 

@@ -10,11 +10,7 @@ public class DlqConsumer {
     @KafkaListener(topics = "payment-created.DLT", groupId = "dlq-group")
     public void consume(PaymentCreatedEvent event) {
 
-        System.out.println("🔥 DLQ RECEBIDO: " + event);
+        System.out.println("payment-created.DLT: " + event);
 
-        // Aqui você pode:
-        // 1. Salvar em banco
-        // 2. Enviar alerta
-        // 3. Reprocessar manualmente
     }
 }
