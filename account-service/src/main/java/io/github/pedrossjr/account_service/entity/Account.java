@@ -1,15 +1,13 @@
 package io.github.pedrossjr.account_service.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Entity
 @Data
+@Table(name = "tb_accounts")
 public class Account {
 
     @Id
@@ -17,6 +15,8 @@ public class Account {
     private Long id;
 
     private Long userId;
+
+    private String accountNumber;
 
     private BigDecimal balance;
 }
