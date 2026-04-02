@@ -13,11 +13,11 @@ Apesar de ter um escopo funcional direcionado a pagamentos e contas bancárias, 
 
 ## Tecnologias Utilizadas
 O projeto adota uma arquitetura distribuída e utiliza as seguintes tecnologias:
-- **Arquitetura de Microserviços:** Serviços separados por domínio (ex: account-service, payment-service, auth-service, notification-service).
+- **Arquitetura de Microserviços:** Serviços separados por domínio (ex: account-service, payment-service, auth-service, notification-service, service-discovery).
 - **Apache Kafka:** Utilizado para comunicação assíncrona entre os serviços, garantindo alta performance e resiliência (event-driven).
 - **Discovery Service com Eureka:** Registro e descoberta dinâmica dos microserviços.
 - **API Gateway:** Ponto central unificado de entrada para o roteamento das requisições REST da plataforma.
-- **API Rest:** Interfaces síncronas de comunicação bem definidas.
+- **API Rest:** Interfaces síncronas de comunicação definidas.
 - **Banco de Dados Postgres:** Persistência de dados consistente e segura.
 - **Docker:** Containerização dos serviços individuais e dependências para garantir consistência entre ambientes.
 - **Kubernetes (K8s):** Orquestração dos containers para gerenciar escalabilidade, disponibilidade e deploy.
@@ -31,4 +31,4 @@ Ao executar a infraestrutura localmente, você pode acessar os seguintes painéi
 ---
 
 **Propósito Educacional**  
-Este é um projeto **aberto** para que outros desenvolvedores possam utilizá-lo como material de aprendizado, servindo como uma ótima referência prática para entender como que funciona a utilização destas tecnologias integradas. Mais funcionalidades serão acrescentadas com o tempo, evoluindo o escopo do projeto e erros também possam talvez serem encontrados no decorrer do desenvolvimento do projeto!
+Este é um projeto aberto para que outros desenvolvedores possam utilizá-lo como material de aprendizado, servindo como uma ótima referência prática para entender como que funciona a utilização destas tecnologias integradas. O projeto não está concluído e mais funcionalidades serão acrescentadas com o tempo, evoluindo o escopo do projeto. Como é um projeto para fins educacionais, erros talvez podem serem encontrados no decorrer do desenvolvimento.

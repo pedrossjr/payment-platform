@@ -2,6 +2,7 @@ package io.github.pedrossjr.account_service.service;
 
 import io.github.pedrossjr.account_service.entity.Account;
 import io.github.pedrossjr.account_service.record.AccountRecord;
+import io.github.pedrossjr.account_service.record.AccountTransferRecord;
 import io.github.pedrossjr.account_service.repository.AccountRepository;
 import io.github.pedrossjr.common.event.PaymentCreatedEvent;
 import io.github.pedrossjr.common.event.PaymentProcessedEvent;
@@ -108,20 +109,20 @@ public class AccountService {
         }
     }
 
-    public Account transferAmountAccount(String fromAccountNumber, String toAccountNumber, BigDecimal amount) {
+    public Account transferAmountAccount(AccountTransferRecord accountTransferRecord) {
         try {
-            Account fromAccount = accountRepository.findByAccountNumber(fromAccountNumber)
+            Account fromAccount = accountRepository.findByAccountNumber(accountTransferRecord.fromAccountNumber())
                 .orElseThrow(() -> new RuntimeException("Conta de origem não encontrada."));
 
-            Account toAccount = accountRepository.findByAccountNumber(toAccountNumber)
+            Account toAccount = accountRepository.findByAccountNumber(accountTransferRecord.toAccountNumber())
                 .orElseThrow(() -> new RuntimeException("Conta de destino não encontrada."));
 
-            if (fromAccount.getBalance().compareTo(amount) < 0) {
+            if (fromAccount.getBalance().compareTo(accountTransferRecord.amount()) < 0) {
                 throw new RuntimeException("Saldo insuficiente na conta de origem.");
             }
 
-            fromAccount.setBalance(fromAccount.getBalance().subtract(amount));
-            toAccount.setBalance(toAccount.getBalance().add(amount));
+            fromAccount.setBalance(fromAccount.getBalance().subtract(accountTransferRecord.amount()));
+            toAccount.setBalance(toAccount.getBalance().add(accountTransferRecord.amount()));
 
             accountRepository.save(fromAccount);
             accountRepository.save(toAccount);

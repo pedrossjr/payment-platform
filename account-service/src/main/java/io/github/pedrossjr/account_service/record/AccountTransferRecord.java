@@ -2,8 +2,9 @@ package io.github.pedrossjr.account_service.record;
 
 import java.math.BigDecimal;
 
-public record AccountRecord(
-    Long userId,
-    BigDecimal balance
+public record AccountTransferRecord(
+    String fromAccountNumber,
+    String toAccountNumber,
+    BigDecimal amount
 ) {
 }

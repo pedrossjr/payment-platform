@@ -28,7 +28,7 @@ public class PaymentService {
 
         Payment payment = new Payment();
         payment.setExternalId(UUID.randomUUID().toString());
-        payment.setAccountId(request.accountId());
+        payment.setAccountNumber(request.accountNumber());
         payment.setAmount(request.amount());
         payment.setStatus("PENDING");
         payment.setCreatedAt(LocalDateTime.now());

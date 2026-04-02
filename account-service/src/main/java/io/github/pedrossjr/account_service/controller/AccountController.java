@@ -2,6 +2,7 @@ package io.github.pedrossjr.account_service.controller;
 
 import io.github.pedrossjr.account_service.entity.Account;
 import io.github.pedrossjr.account_service.record.AccountRecord;
+import io.github.pedrossjr.account_service.record.AccountTransferRecord;
 import io.github.pedrossjr.account_service.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,5 +30,15 @@ public class AccountController {
     @GetMapping("/{accountNumber}/get")
     public ResponseEntity<Account> getAccountNumber(@PathVariable String accountNumber) {
         return ResponseEntity.ok(accountService.getAccountNumber(accountNumber));
+    }
+
+    @PostMapping("/transfer")
+    public ResponseEntity<String> transfer(@RequestBody AccountTransferRecord accountTransferRecord ) {
+        try {
+            accountService.transferAmountAccount(accountTransferRecord);
+            return ResponseEntity.ok("Transferência realizada com sucesso.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
